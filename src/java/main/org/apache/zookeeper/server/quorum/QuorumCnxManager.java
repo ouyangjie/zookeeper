@@ -195,6 +195,8 @@ public class QuorumCnxManager {
         }
         
         // If lost the challenge, then drop the new connection
+        // zk中，只允许myid大的节点去连接myid小的节点，
+        //所以在扩容或者缩容zk集群时，必须按照 myid 从小到大的顺序的重启；
         if (sid > self.getId()) {
             LOG.info("Have smaller server identifier, so dropping the " +
                      "connection: (" + sid + ", " + self.getId() + ")");
