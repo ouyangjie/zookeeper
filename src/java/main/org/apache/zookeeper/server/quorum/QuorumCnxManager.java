@@ -59,7 +59,8 @@ import org.apache.zookeeper.server.ZooKeeperThread;
  * message to the tail of the queue, thus changing the order of messages.
  * Although this is not a problem for the leader election, it could be a problem
  * when consolidating peer communication. This is to be verified, though.
- * 
+ *
+ *  这个类，观其名就知道：它只是管理 QuorumPeer 之间的连接。
  */
 
 public class QuorumCnxManager {
@@ -106,6 +107,7 @@ public class QuorumCnxManager {
      * Mapping from Peer to Thread number
      */
     final ConcurrentHashMap<Long, SendWorker> senderWorkerMap;
+    //初始化 CnxManager时为空,当往peers中发送投票信息时，会添加 (sid,投票信息等)
     final ConcurrentHashMap<Long, ArrayBlockingQueue<ByteBuffer>> queueSendMap;
     final ConcurrentHashMap<Long, ByteBuffer> lastMessageSent;
 
@@ -234,7 +236,14 @@ public class QuorumCnxManager {
      * connection if it wins. Notice that it checks whether it has a connection
      * to this server already or not. If it does, then it sends the smallest
      * possible long value to lose the challenge.
-     * 
+     *
+     * 1.每个节点启动时，在会在选举的端口监听外部连接请求，参见该类的Listener方法;
+     * 2.每个节点在请求连接其他节点的选举端口时，会报出自己的Myid，
+     *   发出挑战(即是：{@link org.apache.zookeeper.server.quorum.FastLeaderElection.ToSend.mType#challenge})
+     *   如果：<ol>
+     *          <li>当前节点收到的Myid 比自己小，则自己赢了挑战,关闭对方对自己的连接，自己去连接对方</li>
+     *          <li>当前节点收到的Myid 比自己小，则自己输了挑战,允许别人连接自己</li>
+     *         </ol>
      */
     public void receiveConnection(Socket sock) {
         Long sid = null;
