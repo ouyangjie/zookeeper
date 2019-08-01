@@ -61,6 +61,8 @@ import org.apache.zookeeper.server.ZooKeeperThread;
  * when consolidating peer communication. This is to be verified, though.
  *
  *  这个类，观其名就知道：它只是管理 QuorumPeer 之间的连接。
+ *
+ *  问题：如果修改运行中的zk集群中某个节点的Myid，重启该节点或者集群内其他节点，会出现什么现象?
  */
 
 public class QuorumCnxManager {
