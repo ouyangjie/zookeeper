@@ -592,7 +592,10 @@ public class QuorumPeer extends ZooKeeperThread implements QuorumStats.Provider 
         }
         return zkDb.getDataTreeLastProcessedZxid();
     }
-    
+
+    ///////////////////////////////////////////////
+    //一个QuorumPeer只能扮演者三个角色中的某一个;//
+    ///////////////////////////////////////////////
     public Follower follower;
     public Leader leader;
     public Observer observer;

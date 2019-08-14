@@ -200,7 +200,7 @@ public class QuorumCnxManager {
         
         // If lost the challenge, then drop the new connection
         // zk中，只允许myid大的节点去连接myid小的节点，
-        //所以在扩容或者缩容zk集群时，必须按照 myid 从小到大的顺序的重启；
+        //所以在扩容或者缩容zk集群时，必须按照 myid 从小到大的顺序的重启？(很多网文的观点,我看是误导人)；
         if (sid > self.getId()) {
             LOG.info("Have smaller server identifier, so dropping the " +
                      "connection: (" + sid + ", " + self.getId() + ")");
@@ -309,6 +309,10 @@ public class QuorumCnxManager {
 
             // Otherwise start worker threads to receive data.
         } else {
+            //这里假定之前有一个集群，myid（1,2,3），然后新加入一个节点4，
+            //此时（1,2,3）的配置文件(zoo.cfg)的peer虽然有（4），
+            //但由于（1,2,3）没有重启;所以还不知道有4的存在，但根据下面的代码来看，
+            //也不会拒绝来自4的连接;
             SendWorker sw = new SendWorker(sock, sid);
             RecvWorker rw = new RecvWorker(sock, sid, sw);
             sw.setRecv(rw);
@@ -504,7 +508,7 @@ public class QuorumCnxManager {
     }
 
     /**
-     * Thread to listen on some port
+     * Thread to listen on some port;在选举端口上监听;
      */
     public class Listener extends ZooKeeperThread {
 

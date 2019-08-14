@@ -362,6 +362,7 @@ public class FastLeaderElection implements Election {
                                 /*
                                  * If this server is not looking, but the one that sent the ack
                                  * is looking, then send back what it believes to be the leader.
+                                 * 比如：zk集群扩容时，收到新加入节点的投票，而自己之前已经被命运安排为"Follower"或者"Leader";
                                  */
                                 Vote current = self.getCurrentVote();
                                 if(ackstate == QuorumPeer.ServerState.LOOKING){
@@ -543,7 +544,7 @@ public class FastLeaderElection implements Election {
 
         sendqueue = new LinkedBlockingQueue<ToSend>();
         recvqueue = new LinkedBlockingQueue<Notification>();
-        this.messenger = new Messenger(manager);
+        this.messenger = new Messenger(manager);//在FastLeaderElection初始化时,就启动WorkerSender,WorkerReceiver线程;
     }
 
     private void leaveInstance(Vote v) {
