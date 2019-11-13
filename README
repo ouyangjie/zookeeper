@@ -5,3 +5,16 @@
 1）:比如一个新节点加入已经运行多日集群，整个集群及新节点的行为如何？
 2）:比如Leader节点Down机，其余节点的表现.
 3）:所阅读的代码运行于什么角色中.
+
+zk client 看到的 zk server 的视图(view) 永远是一致的吗？官网说得很清楚:
+
+###Simultaneously Conistent Cross-Client Views###
+Simultaneously Consistent Cross-Client Views ZooKeeper does not guarantee that at every instance in time,
+two different clients will have identical views of ZooKeeper data. Due to factors like network delays,
+one client may perform an update before another client gets notified of the change.
+Consider the scenario of two clients, A and B. If client A sets the value of a znode /a from 0 to 1,
+then tells client B to read /a, client B may read the old value of 0, depending on which server it is connected to.
+If it is important that Client A and Client B read the same value,
+Client B should should call the sync() method from the ZooKeeper API method before it performs its read
+
+这跟Zookeeper的"Single System Image"并不矛盾。

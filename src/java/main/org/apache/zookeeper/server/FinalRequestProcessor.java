@@ -70,7 +70,7 @@ import org.apache.zookeeper.OpResult.ErrorResult;
  * request and services any queries. It is always at the end of a
  * RequestProcessor chain (hence the name), so it does not have a nextProcessor
  * member.
- *
+ *  //划重点:1):应用transaction 2):for any query;
  * This RequestProcessor counts on ZooKeeperServer to populate the
  * outstandingRequests member of ZooKeeperServer.
  */
@@ -96,10 +96,10 @@ public class FinalRequestProcessor implements RequestProcessor {
             ZooTrace.logRequest(LOG, traceMask, 'E', request, "");
         }
         ProcessTxnResult rc = null;
-        synchronized (zks.outstandingChanges) {
+        synchronized (zks.outstandingChanges) { // ChangeRecord代指对zk server 发起了修改操作(create, delete, setDat等操作);
             while (!zks.outstandingChanges.isEmpty()
                     && zks.outstandingChanges.get(0).zxid <= request.zxid) {
-                ChangeRecord cr = zks.outstandingChanges.remove(0);
+                ChangeRecord cr = zks.outstandingChanges.remove(0); //ChangeRecord代指对zk server 发起了修改操作(create, delete, setDat等操作);但尚未处理;
                 if (cr.zxid < request.zxid) {
                     LOG.warn("Zxid outstanding "
                             + cr.zxid

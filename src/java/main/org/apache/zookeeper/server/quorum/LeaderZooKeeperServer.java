@@ -66,7 +66,7 @@ public class LeaderZooKeeperServer extends QuorumZooKeeperServer {
                 getZooKeeperServerListener());
         commitProcessor.start();
         ProposalRequestProcessor proposalProcessor = new ProposalRequestProcessor(this,
-                commitProcessor);
+                commitProcessor); //在follower端，就是 SyncRequestProcessor;
         proposalProcessor.initialize();
         firstProcessor = new PrepRequestProcessor(this, proposalProcessor);
         ((PrepRequestProcessor)firstProcessor).start();

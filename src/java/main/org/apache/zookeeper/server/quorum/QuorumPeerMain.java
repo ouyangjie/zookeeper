@@ -128,7 +128,7 @@ public class QuorumPeerMain {
       try {
           ServerCnxnFactory cnxnFactory = ServerCnxnFactory.createFactory();
           cnxnFactory.configure(config.getClientPortAddress(),
-                                config.getMaxClientCnxns());
+                                config.getMaxClientCnxns());//监听并接收客户端的连接;
   
           quorumPeer = new QuorumPeer();
           quorumPeer.setClientPortAddress(config.getClientPortAddress());

@@ -123,7 +123,7 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
     static final private long superSecret = 0XB3415C00L;
 
     int requestsInProcess;
-    final List<ChangeRecord> outstandingChanges = new ArrayList<ChangeRecord>();
+    final List<ChangeRecord> outstandingChanges = new ArrayList<ChangeRecord>();//ChangeRecord代指对zk server 发起了修改操作(create, delete, setDat等操作);
     // this data structure must be accessed under the outstandingChanges lock
     final HashMap<String, ChangeRecord> outstandingChangesForPath =
         new HashMap<String, ChangeRecord>();
@@ -697,7 +697,7 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
             touch(si.cnxn);
             boolean validpacket = Request.isValid(si.type);
             if (validpacket) {
-                firstProcessor.processRequest(si);
+                firstProcessor.processRequest(si);//如果zk是集群模式，要在FollowerZookeeperServer/LeaderZookeeperServer中找firstProcessor;
                 if (si.cnxn != null) {
                     incInProcess();
                 }

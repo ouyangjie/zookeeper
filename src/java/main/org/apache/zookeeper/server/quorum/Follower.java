@@ -82,7 +82,7 @@ public class Follower extends Learner{
                 syncWithLeader(newEpochZxid);                
                 QuorumPacket qp = new QuorumPacket();
                 while (self.isRunning()) {
-                    readPacket(qp);
+                    readPacket(qp); //阻塞在这里;leaderIs 包装了对leader的 socket input stream;
                     processPacket(qp);
                 }
             } catch (Exception e) {

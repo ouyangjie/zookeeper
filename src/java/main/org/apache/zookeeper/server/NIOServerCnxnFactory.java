@@ -77,7 +77,7 @@ public class NIOServerCnxnFactory extends ServerCnxnFactory implements Runnable 
     }
 
     Thread thread;
-    @Override
+    @Override //addr指的是本机ip + clientPort;
     public void configure(InetSocketAddress addr, int maxcc) throws IOException {
         configureSaslLogin();
 
@@ -109,7 +109,7 @@ public class NIOServerCnxnFactory extends ServerCnxnFactory implements Runnable 
             thread.start();
         }
     }
-
+    // if runs a standalone ZooKeeperServer, call this method;
     @Override
     public void startup(ZooKeeperServer zks) throws IOException,
             InterruptedException {

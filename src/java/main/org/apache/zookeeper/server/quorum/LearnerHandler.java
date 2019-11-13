@@ -52,11 +52,11 @@ import org.slf4j.LoggerFactory;
 /**
  * There will be an instance of this class created by the Leader for each
  * learner. All communication with a learner is handled by this
- * class.
+ * class.// 注:learner is follower or observer at the view of leader.run on the side of leader;
  */
 public class LearnerHandler extends ZooKeeperThread {
     private static final Logger LOG = LoggerFactory.getLogger(LearnerHandler.class);
-
+    // socket from follower or observer;
     protected final Socket sock;    
 
     public Socket getSocket() {
