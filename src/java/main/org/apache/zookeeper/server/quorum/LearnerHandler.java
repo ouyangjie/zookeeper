@@ -212,7 +212,7 @@ public class LearnerHandler extends ZooKeeperThread {
                 if (LOG.isTraceEnabled()) {
                     ZooTrace.logQuorumPacket(LOG, traceMask, 'o', p);
                 }
-                oa.writeRecord(p, "packet");
+                oa.writeRecord(p, "packet"); // wrap socket output stream by pl;
             } catch (IOException e) {
                 if (!sock.isClosed()) {
                     LOG.warn("Unexpected exception at " + this, e);

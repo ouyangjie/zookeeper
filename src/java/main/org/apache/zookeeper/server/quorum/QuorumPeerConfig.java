@@ -118,8 +118,10 @@ public class QuorumPeerConfig {
 
             parseProperties(cfg);
         } catch (IOException e) {
+          	e.printStackTrace();
             throw new ConfigException("Error processing " + path, e);
         } catch (IllegalArgumentException e) {
+		  e.printStackTrace();
             throw new ConfigException("Error processing " + path, e);
         }
     }

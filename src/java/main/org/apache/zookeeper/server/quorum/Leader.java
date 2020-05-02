@@ -742,7 +742,7 @@ public class Leader {
          * Address the rollover issue. All lower 32bits set indicate a new leader
          * election. Force a re-election instead. See ZOOKEEPER-1277
          */
-        if ((request.zxid & 0xffffffffL) == 0xffffffffL) {
+        if ((request.zxid & 0xffffffffL) == 0xffffffffL) { //低32的zxid满了(都是32位都是1)，则shutDown leader，触发重新选举;
             String msg =
                     "zxid lower 32 bits have rolled over, forcing re-election, and therefore new epoch start";
             shutdown(msg);
